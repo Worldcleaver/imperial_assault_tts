@@ -199,7 +199,7 @@ end
 
 function onClick(player, value, id)
   self.UI.setAttribute("panel", "position", "0 0 -" .. self.getBounds().size.y / self.getScale().y * options.heightModifier)
-  if id == nil and player != nil then
+  if id == nil and player ~= nil then
     id = player
   end
   if id == "editButton" then
@@ -1607,7 +1607,7 @@ function onload(save_state)
             if item[12] == "1a8667" then
               item[12] = "47ec73"
             end
-            if getObjectFromGUID(item[12]) != nil then --card removed
+            if getObjectFromGUID(item[12]) ~= nil then --card removed
               --if(item[1] == 'Hero') then
                 getObjectFromGUID(item[12]).setTable('Details', item)
                 for t, token in ipairs(item[13]) do
@@ -1633,7 +1633,7 @@ function onload(save_state)
               --end
 
               --for t, token in ipairs(item[13]) do
-                --  if getObjectFromGUID(token[1]) != nil then
+                --  if getObjectFromGUID(token[1]) ~= nil then
                       --getObjectFromGUID(token[2]).setVar('Token', token[1])
                     --  getObjectFromGUID(token[1]).setVar('BB', token[2])
                       --getObjectFromGUID(token[1]).setVar('RB', token[3])
@@ -1728,7 +1728,7 @@ function onSave()
     if guid_to_save then
         data_to_save = {}
         for i, item in ipairs(guid_to_save) do
-            if getObjectFromGUID(item) != nil then
+            if getObjectFromGUID(item) ~= nil then
                 local data = getObjectFromGUID(item).getTable('Details')
                 data[12] = item
                 for j=1,16 do
@@ -1921,7 +1921,7 @@ end
 
 function onObjectLeaveContainer(Container, object)
     --Create a Button on the card for leaving a container
-    if Cards[object.getName()] != nil and object.getDescription() != '' and object.getDescription() != 'Class Deck' then
+    if Cards[object.getName()] ~= nil and object.getDescription() ~= '' and object.getDescription() ~= 'Class Deck' then
         object.createButton({label = object.getName(), click_function = 'Spawn', rotation = {0, 0, 0},
         position = {0, 0.2, 0}, width = (40 * string.len(object.getName())), color = {0.5, 0.5, 0.5}, font_color = {1, 1, 1}, height = 100, font_size = 75,  function_owner = self})
         local data = Cards[object.getName()]
@@ -1930,7 +1930,7 @@ function onObjectLeaveContainer(Container, object)
         object.setTable('Details', data)
     end
 
-    if Maps[object.getName()] != nil and (object.getDescription() == 'Story Card' or string.find(object.getDescription(),"Side")) then
+    if Maps[object.getName()] ~= nil and (object.getDescription() == 'Story Card' or string.find(object.getDescription(),"Side")) then
         object.createButton({label = object.getName(), click_function = 'LoadMap', rotation = {0, 0, 0},
         position = {0, 0.2, 0}, width = (40 * string.len(object.getName())), height = 100, color = {0.5, 0.5, 0.5}, font_color = {1, 1, 1}, font_size = 75, function_owner = self})
     end
@@ -2048,7 +2048,7 @@ function LoadMap(object, playerColor, Reloaded, Flip, Rotation)
       playmap.setLock(true)
 
       --Load Doors
-      if(mapdata[5] != '') then
+      if(mapdata[5] ~= '') then
           LoadDoors(mapdata[5],mapdata[6])
       end
     end
@@ -2148,27 +2148,27 @@ function LoadMap(object, playerColor, Reloaded, Flip, Rotation)
 
     --printToAll('Loaded Doors','Blue')
     --Load Crates
-    if(mapdata[7] != '') then
+    if(mapdata[7] ~= '') then
         LoadCustomModel(mapdata[7], {1.35, 1.35, 1.35}, {0.0,90.0,0.0}, 'https://steamusercontent-a.akamaihd.net/ugc/755969254323594962/2F5F226A94AF22DA95182A1BA45337B4A2B35DFF/','https://steamusercontent-a.akamaihd.net/ugc/755969254323598194/6B41EBE3382420EF6C8B99FDC5DC5326C4B11760/', '')
     end
     --printToAll('Loaded Crates','Blue')
     --Load Mission Tokens (get different Colors working)
-    if(mapdata[9] != '') then
+    if(mapdata[9] ~= '') then
         LoadCustomToken(mapdata[9], mapdata[10], {0.00, 180.00, 0.00}, 'https://steamusercontent-a.akamaihd.net/ugc/973235725989016827/E2388ED983D8CFBCC886B201735EB1962FF4CCAA/', '')
     end
     --printToAll('Loaded MTs','Blue')
     --Load Faction Tokens (Get different Colors working somehow)
-    if(mapdata[11] != '') then
+    if(mapdata[11] ~= '') then
         LoadCustomTile(mapdata[11],{1.23,1.0,1.23}, {0.00, 180.00, 0.00}, mapdata[12])
     end
     --printToAll('Loaded FTs','Blue')
     --Load Terminals
-    if(mapdata[13] != '') then
+    if(mapdata[13] ~= '') then
         LoadCustomModel(mapdata[13], {1.40,1.40,1.40}, {0.0,90.0,0.0}, 'https://steamusercontent-a.akamaihd.net/ugc/755969254323601143/D162744FED76CB6D03211C71AA135A2D64D54783/','https://steamusercontent-a.akamaihd.net/ugc/755969254323602786/9765349124829F7F25BD0E0EA22B8DB64460E292/' , mapdata[14])
     end
     --printToAll('Loaded Terminals','Blue')
     --Load Entrance Tile
-    if(mapdata[15] != '') then
+    if(mapdata[15] ~= '') then
         LoadCustomToken(mapdata[15], {0.63,1.00,0.63}, {0.0,0.0,0.0}, 'https://steamusercontent-a.akamaihd.net/ugc/859478214460663783/9E8261252170DF7CAD8B4D7471A8F114BFF8777D/', mapdata[16] )
     end
     --printToAll('Loaded Entrance','Blue')
@@ -2293,7 +2293,7 @@ function getFromBag(bag_guid, iname, params)
     local bagitems = bag.getObjects()
 
 --search it in a loop, compares name to string pattern, adds to a table if it finds
-    if bagitems != nil then
+    if bagitems ~= nil then
         for k, v in pairs(bagitems) do
             if v.name == iname then
                 params.guid = v.guid
@@ -2310,7 +2310,7 @@ function getFromBag(bag_guid, iname, params)
 end
 
 function ExtraSetup(v)
-  if v.getName() != "Storming the Palace - Rancor Pit" then
+  if v.getName() ~= "Storming the Palace - Rancor Pit" then
     v.removeAttachments()
   end
 end
@@ -2333,7 +2333,7 @@ function LoadDoors(Doordata,DoorHealth)
         Spawned_Door.setDescription('Current Map')
         Spawned_Door.setLock(true)
         Spawned_Door.setName('Door '.. i) --if the add bar requires unique door names
-        if DoorHealth != '' then
+        if DoorHealth ~= '' then
           AddBarObject(Spawned_Door, DoorHealth)
         else
           newScript = "function onLoad() end function onPickUp() if string.match(self.getName(), 'Door') then Global.call('playsound',116) end end"
@@ -2347,12 +2347,12 @@ function LoadCustomTile(oData, oscale, orot, oHealth)
     for i, thing in ipairs(oData) do
 
       oParameters.type = 'Custom_Tile'
-      --if thing[4] != 0 then
+      --if thing[4] ~= 0 then
           --oParameters.rotation = {0.0,180.0,180.0}
       --else
           --oParameters.rotation = orot
       --end
-      if thing[4] != nil then
+      if thing[4] ~= nil then
           if thing[5] == 'Y' then
             oParameters.image = 'https://steamusercontent-a.akamaihd.net/ugc/973235725992413522/3E91DAEF98F1C121ED1AF1B9B0B890BD2955A8A7/'
             oParameters.image_bottom = 'https://steamusercontent-a.akamaihd.net/ugc/973235725992413931/F4013D3262B429217824940111D2A3ADBF531CAA/'
@@ -2378,7 +2378,7 @@ function LoadCustomTile(oData, oscale, orot, oHealth)
               oParameters.image_bottom = 'https://steamusercontent-a.akamaihd.net/ugc/973235725991415783/C372EDC78FF0DCC5C7C43A3D181F23EDC540B2C9/'
           end
       end
-      if thing[4] != 0 then
+      if thing[4] ~= 0 then
           local temp = oParameters.image
           oParameters.image = oParameters.image_bottom
            oParameters.image_bottom = temp
@@ -2388,7 +2388,7 @@ function LoadCustomTile(oData, oscale, orot, oHealth)
       oParameters.position = {thing[1],thing[2],thing[3]}
 
       local Spawned_o = spawnObject(oParameters)
-      if  thing[4] != nil then
+      if  thing[4] ~= nil then
         if thing[5] == 'L' or thing[5] == 'E' then
           oParameters.type = 3
         else
@@ -2400,7 +2400,7 @@ function LoadCustomTile(oData, oscale, orot, oHealth)
       Spawned_o.setCustomObject(oParameters)
       Spawned_o.setDescription('Current Map')
       Spawned_o.setLock(true)
-      if oHealth != '' then
+      if oHealth ~= '' then
         AddBarObject(Spawned_o, oHealth)
       end
     end
@@ -2411,7 +2411,7 @@ function LoadCustomModel(oData, oscale, orot, omesh, odiffuse, oHealth)
         local oParameters = {}
         local cterminal = false
         oParameters.type = 'Custom_Model'
-        if thing[4] != nil then
+        if thing[4] ~= nil then
             if thing[4] == 1 then
                 oParameters.rotation = {0.0,180.0,180.0}
             elseif thing[4] == 3 then
@@ -2430,7 +2430,7 @@ function LoadCustomModel(oData, oscale, orot, omesh, odiffuse, oHealth)
         oInfo.type = 1
         oInfo.mesh = omesh
 
-        if thing[4] != nil then
+        if thing[4] ~= nil then
             if cterminal == false then
             if thing[5] == 'Y' then
                 odiffuse = 'https://steamusercontent-a.akamaihd.net/ugc/859478214460666170/9926E901B75051A5602927EFC20A4D6187F62ECD/'
@@ -2473,7 +2473,7 @@ function LoadCustomModel(oData, oscale, orot, omesh, odiffuse, oHealth)
         Spawned_o.setCustomObject(oInfo)
         Spawned_o.setDescription('Current Map')
         Spawned_o.setLock(true)
-        if oHealth != '' then
+        if oHealth ~= '' then
           AddBarObject(Spawned_o, oHealth)
         end
     end
@@ -2492,10 +2492,10 @@ function FYShuffle( tInput )
 end
 
 function LoadCustomToken(oData, oscale, orot, oskin, effect)
-    if effect != nil and effect == 'Snow' then
+    if effect ~= nil and effect == 'Snow' then
       getObjectFromGUID('7a310a').AssetBundle.playLoopingEffect(1)
     end
-    if oscale[5] != nil then
+    if oscale[5] ~= nil then
         local newarray = {}
         for j, tcolors in ipairs(oscale) do
             if j > 5 then
@@ -2516,7 +2516,7 @@ function LoadCustomToken(oData, oscale, orot, oskin, effect)
 
         oParameters.rotation = orot
         oParameters.position = thing
-        if oscale[5] != nil then
+        if oscale[5] ~= nil then
             oParameters.type = 'Custom_Tile'
             oParameters.scale = {oscale[1],oscale[2],oscale[3]}
             oParameters.image = 'https://steamusercontent-a.akamaihd.net/ugc/973235725989016827/E2388ED983D8CFBCC886B201735EB1962FF4CCAA/'
@@ -2534,7 +2534,7 @@ function LoadCustomToken(oData, oscale, orot, oskin, effect)
                 oskin = 'https://steamusercontent-a.akamaihd.net/ugc/973235725989021085/4CC70DA9EE85A684EC9526C0AC54E4F7FB64DB53/'
             end
             oParameters.image_bottom = oskin
-            if thing[4] != nil then
+            if thing[4] ~= nil then
               oParameters.image = oskin
             else
               oParameters.image_bottom = oskin
@@ -2548,14 +2548,14 @@ function LoadCustomToken(oData, oscale, orot, oskin, effect)
         end
 
         local Spawned_o = spawnObject(oParameters)
-        if oscale[5] != nil then
+        if oscale[5] ~= nil then
             oParameters.type = 2
         end
         Spawned_o.setCustomObject(oParameters)
         Spawned_o.setDescription('Current Map')
         Spawned_o.setLock(true)
-        if oscale[4] != nil then
-            if oscale[4] != '' then
+        if oscale[4] ~= nil then
+            if oscale[4] ~= '' then
               AddBarObject(Spawned_o,oscale[4])
             end
         end
@@ -2563,21 +2563,21 @@ function LoadCustomToken(oData, oscale, orot, oskin, effect)
 end
 
 function Spawn(object, playerColor, Reloaded, Flip, Rotation)
-  if playerColor != "White" then
+  if playerColor ~= "White" then
     local Flipped, Flip, Rotation = isFlipped(object)
-    --if playerColor != 'Black' and object.getDescription() == 'Imperial Deployment Cards' then
+    --if playerColor ~= 'Black' and object.getDescription() == 'Imperial Deployment Cards' then
       --broadcastToAll("You must change your color to Black to spawn Imperial Cards", "White")
     --end
-    --if playerColor == 'Black' and  object.getDescription() != 'Imperial Deployment Cards' and playerColor == 'Black' and  object.getDescription() != 'Mercenary Deployment Cards' and  object.getDescription() != 'Companion Deployment Cards' then
+    --if playerColor == 'Black' and  object.getDescription() ~= 'Imperial Deployment Cards' and playerColor == 'Black' and  object.getDescription() ~= 'Mercenary Deployment Cards' and  object.getDescription() ~= 'Companion Deployment Cards' then
       --broadcastToAll("Black player can't spawn Rebel Cards", Table)
     --end
-    --if playerColor != 'Black' and object.getDescription() != 'Imperial Deployment Cards' or playerColor == 'Black' and string.find(object.getDescription(), 'Deployment Cards') and  object.getDescription() != 'Rebel Deployment Cards' then
+    --if playerColor ~= 'Black' and object.getDescription() ~= 'Imperial Deployment Cards' or playerColor == 'Black' and string.find(object.getDescription(), 'Deployment Cards') and  object.getDescription() ~= 'Rebel Deployment Cards' then
     data = object.getTable('Details')
     object.clearButtons()
     if Reloaded == false then
         --SpawnActivation(object)
         --AddBar is inside the SpawnToken
-        if data[6] != 1 then
+        if data[6] ~= 1 then
             for i=1, data[6] do
                 SpawnToken(object, playerColor, data, i-2)
             end
@@ -2585,7 +2585,7 @@ function Spawn(object, playerColor, Reloaded, Flip, Rotation)
             SpawnToken(object, playerColor, data, 0)
         end
 
-        if data[18] != nil then
+        if data[18] ~= nil then
           playsound(data[18])
         end
 
@@ -2718,7 +2718,7 @@ function Health_Left(object, playerColor, unit_id)
     local hp, tokenobject
     if unit_id == true or unit_id == false then
       tokenobject = getObjectFromGUID(object.getTable('Details')[13][1][1])
-      if tokenobject != nil then
+      if tokenobject ~= nil then
         unit_id = tokenobject.call('getPrefix')
       else
         unit_id = getObjectFromGUID(object.getTable('Details')[13][1][1])
@@ -2730,7 +2730,7 @@ function Health_Left(object, playerColor, unit_id)
       end
       object = getObjectFromGUID(self.UI.getAttribute(unit_id.."_cobject", "text"))
     end
-    if tokenobject != nil then
+    if tokenobject ~= nil then
       hp = tokenobject.call('getHP') - 1
       tokenobject.call("sub")
       if hp < 0 then
@@ -2752,7 +2752,7 @@ function Health_Left(object, playerColor, unit_id)
       end
     else
       --token has been deleted
-      if unit_id != nil then
+      if unit_id ~= nil then
         self.UI.setAttributes(unit_id.."_Table",{active = "false"})
         if self.UI.getAttribute(unit_id.."_W","active") == "true" then
           object.setLock(false)
@@ -2778,7 +2778,7 @@ function Health_Left(object, playerColor, unit_id)
       end
 
       object.clearButtons()
-      if Cards[object.getName()] != nil and object.getDescription() != '' then
+      if Cards[object.getName()] ~= nil and object.getDescription() ~= '' then
           object.createButton({label = object.getName(), click_function = 'Spawn', rotation = {0, 0, 0},
           position = {0, 0.2, 0}, width = (40 * string.len(object.getName())), height = 100, font_size = 75, function_owner = self})
           local data = Cards[object.getName()]
@@ -2820,7 +2820,7 @@ function Health_Right(object, playerColor, unit_id)
   else
     tokenobject = getObjectFromGUID(self.UI.getAttribute(unit_id.."_tobject", "text"))
   end
-    if tokenobject != nil then
+    if tokenobject ~= nil then
       tokenobject.call('add')
     end
 end
@@ -2856,7 +2856,7 @@ end
 function CardHighLight(cardguid, playerColor)
     cobject = getObjectFromGUID(cardguid)
     cobject.highlightOn(stringColorToRGB(playerColor), 5)
-    if playerColor != "Black" then
+    if playerColor ~= "Black" then
       Player[playerColor].lookAt({
           position = cobject.getPosition(),
           pitch    = 45,
@@ -2918,11 +2918,11 @@ function Attack(o, playerColor)
       end
     end
     pf = tokenobject.call('getPrefix')
-    if UI.getAttribute(string.sub(pf,1,2).."_units", "text") != "1" then
+    if UI.getAttribute(string.sub(pf,1,2).."_units", "text") ~= "1" then
       pf = string.sub(pf,1,3)..UI.getAttribute(string.sub(pf,1,2).."_selector", "text")
       tokenobject = getObjectFromGUID(UI.getAttribute(pf.."_tobject", "text"))
     end
-    if UI.getAttribute(pf.."Stunned", "active") != "true" then
+    if UI.getAttribute(pf.."Stunned", "active") ~= "true" then
       if attackerRolled == false then
           CardRoller(o, playerColor, 'attack', 1, 4)
           attackerRolled = true
@@ -2938,7 +2938,7 @@ function Attack(o, playerColor)
               ClearDice()
           end
       end
-      if data[19] != nil and clips == false then
+      if data[19] ~= nil and clips == false then
         playsound(data[19])
       else
         playsound(data[18])
@@ -2952,7 +2952,7 @@ function Defense(object, playerColor)
     data = object.getTable('Details')
     if defenderRolled == false then
         CardRoller(object, playerColor, 'defense', 5, 6)
-        if data[19] != nil and clips == false then
+        if data[19] ~= nil and clips == false then
           playsound(data[19])
         else
           playsound(data[18])
@@ -3038,25 +3038,25 @@ function CardRoller(object, playerColor, Group, Start, Stop)
       end
     end
     pf = tokenobject.call('getPrefix')
-    --if data[1] != 'Hero' then
+    --if data[1] ~= 'Hero' then
 
     --else
       --tokenobject = getObjectFromGUID(UI.getAttribute(pf.."_tobject", "text"))
     --end
-    if UI.getAttribute(string.sub(pf,1,2).."_units", "text") != "1" then
+    if UI.getAttribute(string.sub(pf,1,2).."_units", "text") ~= "1" then
       pf = string.sub(pf,1,3)..UI.getAttribute(string.sub(pf,1,2).."_selector", "text")
       tokenobject = getObjectFromGUID(UI.getAttribute(pf.."_tobject", "text"))
     end
-    if UI.getAttribute(pf.."Focused", "active") == "true" and Group != "defense" then
+    if UI.getAttribute(pf.."Focused", "active") == "true" and Group ~= "defense" then
       SpawnDice(Dice_Status[3][1], false)
       printToAll(object.getName() .. ' is focused! This is gonna hurt', {0,1,1})
       Dice_Status['Extra'][1] = true
       --Spawn(object, playerColor, true)
       tokenobject.call('onClickEx',{id = "Focused"})
     end
-    if UI.getAttribute(pf.."Bleeding", "active") == "true" and Group != "defense" then
+    if UI.getAttribute(pf.."Bleeding", "active") == "true" and Group ~= "defense" then
       printToAll(object.getName() .. ' is bleeding and takes 1 strain.', {0,1,1})
-      if string.sub(pf,1,1) == 'P' and tonumber(string.sub(pf,2,2)) < 5 and tokenobject.call('getSPer') != 100 then
+      if string.sub(pf,1,1) == 'P' and tonumber(string.sub(pf,2,2)) < 5 and tokenobject.call('getSPer') ~= 100 then
         tokenobject.call('addS')
       else
         tokenobject.call('sub')
@@ -3094,15 +3094,15 @@ function CardRoller(object, playerColor, Group, Start, Stop)
         object.setTable('Details', Data)
       else
         if entry.hit_object.name == 'Custom_Token' then
-            if entry.hit_object.getName() == 'Focused' and Group != 'defense' then
+            if entry.hit_object.getName() == 'Focused' and Group ~= 'defense' then
                 --SpawnDice(Dice_Status[3][1], false)
                 printToAll(object.getName() .. ' is focused! This is gonna hurt', {0,1,1})
                 --Dice_Status['Extra'][1] = true
                 --Spawn(object, playerColor, true)
                 --entry.hit_object.destruct()
-            elseif entry.hit_object.getName() == 'Bleeding' and Group != 'defense' then
+            elseif entry.hit_object.getName() == 'Bleeding' and Group ~= 'defense' then
                 printToAll(object.getName()..' is bleeding and takes 1 strain.', {0,1,1})
-            elseif entry.hit_object.getName() == 'Stunned' and Group != 'defense' then
+            elseif entry.hit_object.getName() == 'Stunned' and Group ~= 'defense' then
                 printToAll(object.getName()..' is stunned and cannot attack or move.', {0,1,1})
             elseif entry.hit_object.getName() == 'Weakened' and Group == 'attack' then
                 printToAll(object.getName()..' is weakened. Apply -1 Surge to the Attack results', {0,1,1})
@@ -3124,12 +3124,12 @@ function CardRoller(object, playerColor, Group, Start, Stop)
      if IACP == true and data[1] == 'Hero1' then
        Type = 'Villain'
      end
-     if IACP == true and data[1] != 'Hero1' then
+     if IACP == true and data[1] ~= 'Hero1' then
        Side = 0
        Who = 1
        Type = 'Hero'
      end
-     if data[1] != 'Villain' and IACP == false then
+     if data[1] ~= 'Villain' and IACP == false then
          Side = 0
          Who = 1
          Type = 'Hero'
@@ -3394,28 +3394,28 @@ function Hero_DiceRoller(object, dicetype, playerColor)
     Data = object.getTable('Details')
     tokenobject = getObjectFromGUID(object.getTable('Details')[13][1][1])
     pf = tokenobject.call('getPrefix')
-    if UI.getAttribute(pf.."Stunned", "active") == "true" and dicetype[1] != "Attack" or UI.getAttribute(pf.."Stunned", "active") != "true" then
-      if UI.getAttribute(string.sub(pf,1,2).."_units", "text") != "1" then
+    if UI.getAttribute(pf.."Stunned", "active") == "true" and dicetype[1] ~= "Attack" or UI.getAttribute(pf.."Stunned", "active") ~= "true" then
+      if UI.getAttribute(string.sub(pf,1,2).."_units", "text") ~= "1" then
         pf = string.sub(pf,1,3)..UI.getAttribute(string.sub(pf,1,2).."_selector", "text")
         tokenobject = getObjectFromGUID(UI.getAttribute(pf.."_tobject", "text"))
       end
-      if UI.getAttribute(pf.."Focused", "active") == "true" and dicetype[1] != 'Defense' then
+      if UI.getAttribute(pf.."Focused", "active") == "true" and dicetype[1] ~= 'Defense' then
         SpawnDice(Dice_Status[3][1], false)
         printToAll(object.getName() .. ' is focused! This is gonna hurt', {0,1,1})
         Dice_Status['Extra'][1] = true
         --Spawn(object, playerColor, true)
         tokenobject.call('onClickEx',{id = "Focused"})
       end
-      if UI.getAttribute(pf.."Bleeding", "active") == "true" and dicetype[1] != 'Defense' then
+      if UI.getAttribute(pf.."Bleeding", "active") == "true" and dicetype[1] ~= 'Defense' then
         printToAll(object.getName() .. ' is bleeding and takes 1 strain.', {0,1,1})
-        if string.sub(pf,1,1) == 'P' and tonumber(string.sub(pf,2,2)) < 5 and tokenobject.call('getSPer') != 100 then
+        if string.sub(pf,1,1) == 'P' and tonumber(string.sub(pf,2,2)) < 5 and tokenobject.call('getSPer') ~= 100 then
           tokenobject.call('addS')
         else
           tokenobject.call('sub')
         end
       end
 
-      if Data[19] != nil and clips == false then
+      if Data[19] ~= nil and clips == false then
         playsound(Data[19])
       else
         playsound(Data[18])
@@ -3458,7 +3458,7 @@ function Hero_DiceRoller(object, dicetype, playerColor)
               entry.hit_object.setPositionSmooth(Location(object, 1.5 + (-t * 0.3), -2), false, true)
           else
               if entry.hit_object.name == 'Custom_Token' and Dice_Status['Hero'][1] == false and cleardicenow == false then
-                  if entry.hit_object.getName() == 'Focused' and dicetype[1] != 'Defense' then
+                  if entry.hit_object.getName() == 'Focused' and dicetype[1] ~= 'Defense' then
                       SpawnDice(Dice_Status[3][1], false)
                       printToAll(object.getName() .. ' is focused!', {0,1,1})
                       Dice_Status['Extra'][1] = true
@@ -3466,10 +3466,10 @@ function Hero_DiceRoller(object, dicetype, playerColor)
                       entry.hit_object.destruct()
                       tokenobject = getObjectFromGUID(object.getTable('Details')[13][1][1])
                       tokenobject.call('onClickEx',{id = "Focused"})
-                  elseif entry.hit_object.getName() == 'Bleeding' and dicetype[1] != 'Defense' then
+                  elseif entry.hit_object.getName() == 'Bleeding' and dicetype[1] ~= 'Defense' then
                       printToAll(object.getName()..' is bleeding!', {0,1,1})
                       Hero_Strain(object,playerColor)
-                  elseif entry.hit_object.getName() == 'Stunned' and dicetype[1] != 'Defense' then
+                  elseif entry.hit_object.getName() == 'Stunned' and dicetype[1] ~= 'Defense' then
                       printToAll(object.getName()..' is stunned and cannot attack or move.', {0,1,1})
                   elseif entry.hit_object.getName() == 'Inspired' then
                       printToAll(object.getName()..' is inspired and can reroll 1 die. Then discard token', {0,1,1})
@@ -3503,7 +3503,7 @@ function Hero_DiceRoller(object, dicetype, playerColor)
           end
 
       if dicetype[1] == 'Attack' and attackerRolled == false or dicetype[1] == 'Defense' and defenderRolled == false
-      or dicetype[1] != 'Attack' and dicetype[1] != 'Defense' and attackerRolled == false and defenderRolled == false then
+      or dicetype[1] ~= 'Attack' and dicetype[1] ~= 'Defense' and attackerRolled == false and defenderRolled == false then
           printToAll(object.getName() .. ' is rolling ' .. dicetype[1] .. ' dice.', {0,1,1})
           local Flipped, Flip, Rotation = isFlipped(object)
           if Flipped == true and dicetype[4] > 7 then
@@ -3788,7 +3788,7 @@ function displayResults()
     local STotal = 0
 
     for i, die in ipairs(currentDice) do
-        if die != nil then
+        if die ~= nil then
             local ddescriptor = ''
             Range = Range + Die_Reference[die.getName()][die.getValue()][1]
             if Die_Reference[die.getName()][die.getValue()][1] > 0 then
@@ -3875,7 +3875,7 @@ function displayResults()
       UI.setAttribute("Range", "color", "#FFA500")
     end
 
-    if Block != '*' then
+    if Block ~= '*' then
       if Block > 4 then
         playsound(104)
       end
@@ -3999,7 +3999,7 @@ function ClearDice()
     pad.clearButtons()
     self.UI.setAttributes("ClearDiceP",{active = "false"})
     for i, die in ipairs(currentDice) do
-        if die != nil then
+        if die ~= nil then
             die.destruct()
             self.UI.setAttributes("D"..i, {active = false})
         end
@@ -4265,7 +4265,7 @@ function AddStatus(player, option, id)
 end
 
 function CreditsUp(player, option, id)
-    if player.color != "Black" then
+    if player.color ~= "Black" then
       RebelCredits = RebelCredits + 25
       setCredits(RebelCredits)
     else
@@ -4274,7 +4274,7 @@ function CreditsUp(player, option, id)
 end
 
 function CreditsDown(player, option, id)
-  if player.color != "Black" then
+  if player.color ~= "Black" then
     if RebelCredits > 0 then
       RebelCredits = RebelCredits - 25
       setCredits(RebelCredits)
@@ -4283,7 +4283,7 @@ function CreditsDown(player, option, id)
 end
 
 function XPUp(player, option, id)
-    if player.color != "Black" then
+    if player.color ~= "Black" then
       if RebelXP == null then
         RebelXP = 0
       end
@@ -4293,7 +4293,7 @@ function XPUp(player, option, id)
 end
 
 function XPDown(player, option, id)
-    if player.color != "Black" then
+    if player.color ~= "Black" then
       RebelXP = RebelXP - 1
       setXP(RebelXP)
     end
@@ -4372,7 +4372,7 @@ function AddBar(tokenobject, HP, Str, cardobject, playerColor, type, units,pos)
     options.hp = HP
     options.Strain = 0
     local prefix
-    if playerColor != "Black" then --Rebel
+    if playerColor ~= "Black" then --Rebel
       if string.find(cardobject.getDescription(), 'Deployment') then
         for i=5,9 do
           if self.UI.getAttribute("P"..i.."_Table","active") == 'false' then
@@ -4417,7 +4417,7 @@ function AddBar(tokenobject, HP, Str, cardobject, playerColor, type, units,pos)
     end
     newScript = newScript:gsub("health = {value = 10, max = 10}", "health = {value = " .. options.hp ..", max = " .. options.hp .. "}")
     newScript = newScript:gsub("Strain = {value = 0, max = 4}", "Strain = {value = " .. options.Strain ..", max = " .. Str .. "}")
-    if playerColor != "Black" and playerColor != "White" then
+    if playerColor ~= "Black" and playerColor ~= "White" then
       newScript = newScript:gsub('fillImageColor="#242526"', 'fillImageColor="'..whatcolor(playerColor)..'"')
     end
     newScript = newScript:gsub('cardobjectguid', cardobject.getGUID())
@@ -4463,7 +4463,7 @@ function AddBar(tokenobject, HP, Str, cardobject, playerColor, type, units,pos)
       end
       newScript = newScript:gsub("single = true","single = false")
     else
-      if playerColor != "Black" and tonumber(string.sub(prefix,2,2)) < 5 then
+      if playerColor ~= "Black" and tonumber(string.sub(prefix,2,2)) < 5 then
         newScript = newScript:gsub("prefix = 'G'","prefix = '"..prefix.."'")
       else
         newScript = newScript:gsub("prefix = 'G'","prefix = '"..prefix.."U1'")
@@ -4590,7 +4590,7 @@ function prepUIbars(Name,HP,Strain,playerColor,prefix,units)
   self.UI.setAttributes(prefix.."_Table",{active = "true"})
   self.UI.setAttributes(prefix.."_Name",{text = Name, tooltip="Change to Increase", tooltipPosition="Above"})
   color = whatcolor(playerColor)
-  if playerColor != "Black" then
+  if playerColor ~= "Black" then
     if tonumber(string.sub(prefix,2,2)) > 4 then
       for i=1,units do
         self.UI.setAttributes(prefix.."U"..i.."_hp_bar",{fillImageColor = color, tooltip="Decrease HP", tooltipPosition="Right"})
@@ -4798,7 +4798,7 @@ function onChat(message, player)
       broadcastToAll("Clips have been turned off", "White")
     end
     if string.sub(message,1,5) == 'timer' then
-      if string.sub(message,7,9) != "off" then
+      if string.sub(message,7,9) ~= "off" then
         if string.sub(message,7,9) == "on" then
           timerstatus = true
           broadcastToAll("Timer on", "White")
@@ -4817,7 +4817,7 @@ function onChat(message, player)
     end
   elseif string.len(message) > 2  or string.len(message) < 4 then
     local box = string.sub(message,1,1)
-    if string.len(message) > 2 and string.lower(string.sub(message,3,3)) != 'a' and string.lower(string.sub(message,3,3)) != 'b' then
+    if string.len(message) > 2 and string.lower(string.sub(message,3,3)) ~= 'a' and string.lower(string.sub(message,3,3)) ~= 'b' then
       number = tonumber(string.sub(message,2,3))
     else
       number = tonumber(string.sub(message,2,2))
@@ -4942,13 +4942,13 @@ function UIButton(player, option, id)
     end
     if string.match(id,"_totalhp") then
       if self.UI.getAttribute(pf.."_name", "color") == "#FFFF00" then
-        if string.find(id, "U") != nil then
+        if string.find(id, "U") ~= nil then
           Health_Right(cardobject, "Blue",string.sub(id,1,string.find(id, "_")-1))
         else
           Health_Right(cardobject, "Blue",string.sub(id,1,2))
         end
       else
-        if string.find(id, "U") != nil then
+        if string.find(id, "U") ~= nil then
           Health_Left(cardobject, "Blue",string.sub(id,1,string.find(id, "_")-1))
         else
           Health_Left(cardobject, "Blue",string.sub(id,1,2))
@@ -4957,13 +4957,13 @@ function UIButton(player, option, id)
     end
     if string.match(id,"_totalstrain") then
       if self.UI.getAttribute(pf.."_name", "color") == "#FFFF00" then
-        if string.find(id, "U") != nil then
+        if string.find(id, "U") ~= nil then
           Strain_Right(cardobject, "Blue",string.sub(id, string.find(id, "U")+1, string.find(id, "U")+1), "Red")
         else
           Strain_Right(cardobject, "Blue",1)
         end
       else
-        if string.find(id, "U") != nil then
+        if string.find(id, "U") ~= nil then
           Strain_Left(cardobject, "Blue",string.sub(id, string.find(id, "U")+1, string.find(id, "U")+1), "Red")
         else
           Strain_Left(cardobject, "Blue",1)
@@ -5020,8 +5020,8 @@ function updateUIbar(tokenguid)
   else
       cardguid = self.UI.getAttribute(string.sub(myprefix, 0, 2).."_cobject","text")
       units = self.UI.getAttribute(string.sub(myprefix, 0, 2).."_units","text")
-      if string.sub(hp, 1, 1) == "0" and string.sub(myprefix, 1, 1) == "G" and cardguid != '' or
-      string.sub(hp, 1, 1) == "0" and string.sub(myprefix, 1, 1) == "P" and tonumber(string.sub(myprefix, 2, 2)) > 4 and cardguid != '' then
+      if string.sub(hp, 1, 1) == "0" and string.sub(myprefix, 1, 1) == "G" and cardguid ~= '' or
+      string.sub(hp, 1, 1) == "0" and string.sub(myprefix, 1, 1) == "P" and tonumber(string.sub(myprefix, 2, 2)) > 4 and cardguid ~= '' then
         if string.match(name,"Tank") or string.match(name,"Droid") or string.match(name,'-') and not string.match(name,'cat') then
             explosion(tokenguid,units)
         else
@@ -5049,8 +5049,8 @@ function updateUIbar(tokenguid)
       if string.sub(self.UI.getAttribute(string.sub(myprefix, 0, 2).."U1_totalhp","text"),1,1) == "0" and
         string.sub(self.UI.getAttribute(string.sub(myprefix, 0, 2).."U2_totalhp","text"),1,1) == "0" and
         string.sub(self.UI.getAttribute(string.sub(myprefix, 0, 2).."U3_totalhp","text"),1,1) == "0" and
-        self.UI.getAttribute(string.sub(myprefix, 0, 2).."U2_hp_bar","percentage") != "100" and
-        self.UI.getAttribute(string.sub(myprefix, 0, 2).."U3_hp_bar","percentage") != "100" then
+        self.UI.getAttribute(string.sub(myprefix, 0, 2).."U2_hp_bar","percentage") ~= "100" and
+        self.UI.getAttribute(string.sub(myprefix, 0, 2).."U3_hp_bar","percentage") ~= "100" then
         self.UI.setAttributes(string.sub(myprefix, 0, 2).."_Table",{active = "false"}) --works
         self.UI.setAttributes(string.sub(myprefix, 0, 2).."_selector",{active = "false"})
         self.UI.setAttributes(string.sub(myprefix, 0, 2).."_selector",{text = "1"})
@@ -5118,7 +5118,7 @@ function cbBar(tokenobject, cardobject, prefix, color)
   AdditonalData[3] = prefix
   AdditonalData[4] = color
 
-  if data[17] != nil then
+  if data[17] ~= nil then
     addEffect(tokenobject, data[17])
   end
 
