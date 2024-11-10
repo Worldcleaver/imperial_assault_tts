@@ -480,7 +480,7 @@ function onload(save_state)
     updateTime()
 
     --Dice and Hero Class Bag.. the other bags are locked in Menu
-    getObjectFromGUID('8e7a2e').interactable = false
+    getObjectFromGUID('8e7a2e').interactable = false -- Dice tower shield generator
     getObjectFromGUID('82f9d9').interactable = false -- dice tower
     getObjectFromGUID('b7da53').interactable = false -- dice tower
     getObjectFromGUID('d3851d').interactable = false -- dice tray
